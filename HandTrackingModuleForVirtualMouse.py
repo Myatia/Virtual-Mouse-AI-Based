@@ -8,7 +8,6 @@ import numpy as np
 class handDetector():
     def __init__(self, mode=False, maxNumberHands=2, modelComplexity=1, minDetectionConfidence=0.5,
                  minTrackingConfidence=0.5):
-        # self.lmList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
         self.mode = mode
         self.maxNumberHands = maxNumberHands
         self.modelComplexity = modelComplexity
@@ -20,7 +19,6 @@ class handDetector():
                                         self.minDetectionConfidence, self.minTrackingConfidence)
         self.mpDraw = mp.solutions.drawing_utils
         self.tipIDs = [4, 8, 12, 16, 20]
-
 
     def findHands(self, img, draw=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -36,7 +34,9 @@ class handDetector():
         return img
 
     def findPosition(self, img, hand_num=0, draw=True):
-
+        xList = []
+        yList = []
+        bbox = []
         self.lmlist = []  # list for all landmarks position to return
 
         if self.results.multi_hand_landmarks:
@@ -46,36 +46,41 @@ class handDetector():
                 # print(id, lm)
                 height, width, channel = img.shape
                 cx, cy = int(lm.x * width), int(lm.y * height)  # finding position
+                xList.append(cx)
+                yList.append(cy)
                 # print(id, cx, cy)
                 self.lmlist.append([id, cx, cy])
                 if draw:
                     cv2.circle(img, (cx, cy), 5, (255, 255, 255), cv2.FILLED)
 
-        return self.lmlist
+            xmin, xmax = min(xList), max(xList)
+            ymin, ymax = min(yList), max(yList)
+            bbox = xmin, ymin, xmax, ymax
+
+            if draw:
+                cv2.rectangle(img, (xmin - 20, ymin - 20), (xmax + 20, ymax + 20), (0, 255, 0), 2)
+
+        return self.lmlist, bbox
 
     def fingersUp(self):
-        #if len(self.lmlist) != 0:
-            fingers = []
-            # thumb condition for left hand
-            # change greater than for right hand
-            if self.lmlist[self.tipIDs[0]][1] < self.lmlist[self.tipIDs[0] - 1][1]:  # 1 is x-axis
+        fingers = []
+        # Thumb
+        if self.lmlist[self.tipIDs[0]][1] < self.lmlist[self.tipIDs[0] - 1][1]:  # 1 is x-axis
+            fingers.append(1)
+        else:
+            fingers.append(0)
+
+        # Fingers
+        for id in range(1, 5):
+
+            if self.lmlist[self.tipIDs[id]][2] < self.lmlist[self.tipIDs[id] - 2][2]:
                 fingers.append(1)
             else:
                 fingers.append(0)
 
-        # Fingers
-            for id in range(1, 5): # loop for four fingers, thumb not included
-                # if lmlist[8][2] < lmlist[6][2]:
-                if self.lmlist[self.tipIDs[id]][2] < self.lmlist[self.tipIDs[id] - 2][2]: # 2 is y-axis
-                    fingers.append(1)
-                else:
-                    fingers.append(0)
-
-        # print(fingers)
         # totalFingers = fingers.count(1)
-        # print(totalFingers)
 
-            return fingers
+        return fingers
 
     def findDistance(self, p1, p2, img, draw=True, r=15, t=3):
         x1, y1 = self.lmlist[p1][1:]

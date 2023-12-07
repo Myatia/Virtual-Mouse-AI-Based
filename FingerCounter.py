@@ -33,7 +33,7 @@ while True:
 
         # thumb condition for left hand
         # change greater than for right hand
-        if lmlist[tipIDs[0]][1] < lmlist[tipIDs[0] - 1][1]:  # 2 is y-axis
+        if lmlist[tipIDs[0]][1] < lmlist[tipIDs[0] - 1][1]:  # 1 is x-axis
             fingers.append(1)
         else:
             fingers.append(0)

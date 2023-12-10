@@ -2,7 +2,6 @@ import cv2
 import mediapipe as mp
 import time
 import math
-import numpy as np
 
 
 class handDetector():
@@ -54,7 +53,7 @@ class handDetector():
         return self.lmlist
 
     def fingersUp(self):
-        #if len(self.lmlist) != 0:
+        # if len(self.lmlist) != 0:
             fingers = []
             # thumb condition for left hand
             # change greater than for right hand
@@ -63,7 +62,7 @@ class handDetector():
             else:
                 fingers.append(0)
 
-        # Fingers
+            # Fingers
             for id in range(1, 5): # loop for four fingers, thumb not included
                 # if lmlist[8][2] < lmlist[6][2]:
                 if self.lmlist[self.tipIDs[id]][2] < self.lmlist[self.tipIDs[id] - 2][2]: # 2 is y-axis

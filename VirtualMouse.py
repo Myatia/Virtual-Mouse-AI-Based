@@ -106,7 +106,7 @@ while True:
         cv2.rectangle(img, (frameReduction, frameReduction), (widthCam - frameReduction, heightCam - frameReduction), (255, 0, 255), 2)
 
         # 4. moving mode checking: index finger up
-        if fingers[1] == 1 and fingers[2] == 0:
+        if fingers[1] == 1 and fingers[2] == 0 and fingers[0] == 0:
             # 4.1. converting coordinates
             x3 = np.interp(x1, (frameReduction, widthCam - frameReduction), (0, widthScreen))
             y3 = np.interp(y1, (frameReduction, heightCam - frameReduction), (0, heightScreen))
@@ -138,8 +138,8 @@ while True:
                     print("False left click happen")
 
                 # click events counter
-                print(f'Total clicks: {totalClick}')
-                print(f'False clicks: {falseClick}')
+                # print(f'Total clicks: {totalClick}')
+                # print(f'False clicks: {falseClick}')
 
                 # countMouseClick()
 
@@ -155,13 +155,13 @@ while True:
                 autopy.mouse.click(autopy.mouse.Button.RIGHT)
 
         # 7. scrolling up
-        if fingers[0] == 1:
+        if fingers[0] == 1 and fingers[1] == 0:
             cv2.circle(img, (x4, y4), 10, (255, 0, 255), cv2.FILLED)
             pyautogui.scroll(50)  # scroll up 50 "clicks"
 
         # 8. scrolling down
         if fingers[4] == 1:
-            cv2.circle(img, (x4, y4), 10, (255, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x6, y6), 10, (255, 0, 255), cv2.FILLED)
             pyautogui.scroll(-50)  # scroll down 50 "clicks"
 
         # 9. volume up and down
@@ -173,7 +173,7 @@ while True:
             vol = np.interp(length, [50, 250], [minVol, maxVol])
             volBar = np.interp(length, [50, 250], [400, 150])
             volPer = np.interp(length, [50, 250], [0, 100])
-            print(int(length), vol)
+            # print(int(length), vol)
             volume.SetMasterVolumeLevel(vol, None)
 
             if length < 50:

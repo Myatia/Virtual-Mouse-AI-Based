@@ -21,17 +21,26 @@ class handDetector():
         self.tipIDs = [4, 8, 12, 16, 20]
 
     def findHands(self, img, draw=True):
+        self.myHand = []
+        self.handType = []
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         self.results = self.hands.process(imgRGB)
         # print(results.multi_hand_landmarks)
 
         # open the object
         if self.results.multi_hand_landmarks:
+            for hand in self.results.multi_handedness:
+                self.handType = hand.classification[0].label
+                self.handType.append(self.handType)
             for handLandMarks in self.results.multi_hand_landmarks:  # handLandMarks in this line is single hand
+                self.myHand = []
+                for landmark in handLandMarks.landmark:
+                    self.myHand.append((int(landmark.x*640),int(landmark.y*480)))
+                self.myHand.append(self.myHand)
                 if draw:
                     # HAND_CONNECTIONS - for connecting dots on hands
                     self.mpDraw.draw_landmarks(img, handLandMarks, self.mpHands.HAND_CONNECTIONS)
-        return img
+        return img, self.myHand, self.handType
 
     def findPosition(self, img, hand_num=0, draw=True):
         xList = []

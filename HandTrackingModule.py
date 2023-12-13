@@ -19,7 +19,7 @@ class handDetector():
                                         self.minDetectionConfidence, self.minTrackingConfidence)
         self.mpDraw = mp.solutions.drawing_utils
         self.tipIDs = [4, 8, 12, 16, 20]
-
+        self.leftHand = True
 
     def findHands(self, img, draw=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -57,10 +57,16 @@ class handDetector():
             fingers = []
             # thumb condition for left hand
             # change greater than for right hand
+            # if self.leftHand == True:
             if self.lmlist[self.tipIDs[0]][1] < self.lmlist[self.tipIDs[0] - 1][1]:  # 1 is x-axis
                 fingers.append(1)
             else:
                 fingers.append(0)
+            # elif self.leftHand == False:
+            #     if self.lmlist[self.tipIDs[0]][1] > self.lmlist[self.tipIDs[0] - 1][1]:  # 1 is x-axis
+            #         fingers.append(1)
+            #     else:
+            #         fingers.append(0)
 
             # Fingers
             for id in range(1, 5): # loop for four fingers, thumb not included

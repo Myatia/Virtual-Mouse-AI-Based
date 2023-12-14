@@ -43,7 +43,7 @@ falseClick = 0
 capture = cv2.VideoCapture(0)
 capture.set(3, widthCam)  # width setting
 capture.set(4, heightCam)  # height setting
-detector = htm.handDetector(maxNumberHands=2, minDetectionConfidence=0.7)
+detector = htm.handDetector(maxNumberHands=1, minDetectionConfidence=0.7)
 
 # volume control initialization library
 
@@ -127,7 +127,7 @@ while True:
             length, img, infoLine = detector.findDistance(8, 12, img)
             # print(length)
             # 5.2 clicking when distance is short
-            if length < 30:
+            if length < 40:
                 cv2.circle(img, (infoLine[4], infoLine[5]), 10, (0, 255, 255), cv2.FILLED)
                 # 5.3 exception handling and for calculating accuracy
                 try:
@@ -141,6 +141,11 @@ while True:
                 # print(f'Total clicks: {totalClick}')
                 # print(f'False clicks: {falseClick}')
 
+                # # accuracy calculation
+                # total_attempts = totalClick + falseClick
+                # accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
+                # print(f"Accuracy for left click: {accuracy:.2f}%")
+
                 # countMouseClick()
 
         # 6. clicking mode checking (right click): index and middle fingers up
@@ -150,7 +155,7 @@ while True:
             length1, img, infoLine1 = detector.findDistance(12, 16, img)
 
             # 6.2 clicking when distance is short
-            if length < 30 and length1 < 30:
+            if length < 40 and length1 < 40:
                 cv2.circle(img, (infoLine[4], infoLine[5]), 10, (0, 255, 255), cv2.FILLED)
                 try:
                     autopy.mouse.click(autopy.mouse.Button.RIGHT)
@@ -162,6 +167,11 @@ while True:
                 # click events counter
                 # print(f'Total clicks: {totalClick}')
                 # print(f'False clicks: {falseClick}')
+
+                # # accuracy calculation
+                # total_attempts = totalClick + falseClick
+                # accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
+                # print(f"Accuracy for right click: {accuracy:.2f}%")
 
         # 7. scrolling up
         if fingers[0] == 1 and fingers[1] == 0:
@@ -177,6 +187,11 @@ while True:
             # print(f'Total clicks: {totalClick}')
             # print(f'False clicks: {falseClick}')
 
+            # accuracy calculation
+            total_attempts = totalClick + falseClick
+            accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
+            print(f"Accuracy for scroll up: {accuracy:.2f}%")
+
         # 8. scrolling down
         if fingers[4] == 1:
             cv2.circle(img, (x6, y6), 10, (255, 0, 255), cv2.FILLED)
@@ -190,6 +205,11 @@ while True:
             # click events counter
             # print(f'Total clicks: {totalClick}')
             # print(f'False clicks: {falseClick}')
+
+            # accuracy calculation
+            total_attempts = totalClick + falseClick
+            accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
+            print(f"Accuracy for scroll down: {accuracy:.2f}%")
 
         # 9. volume up and down
         if fingers[0] == 1 and fingers[1] == 1:
@@ -211,6 +231,8 @@ while True:
             cv2.rectangle(img, (50, int(volBar)), (85, 400), (255, 0, 0), cv2.FILLED)
             cv2.putText(img, f'{int(volPer)} %', (40, 450), cv2.FONT_HERSHEY_COMPLEX,
                         1, (255, 0, 0), 3)
+
+
 
     # 10. showing frames rate
     currentTime = time.time()

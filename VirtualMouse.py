@@ -9,20 +9,6 @@ from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-# 1. finding hand landmarks
-# 2. getting the tip of the fingers
-# 3. checking which fingers are up
-# 4. moving mode checking: index finger up
-    # 4.1. converting coordinates
-    # 4.2 smoothing the values
-    # 4.3 moving the mouse
-# 5. clicking mode checking: index and middle fingers up
-    # 5.1 finding distance between fingers
-    # 5.2 clicking when distance is short
-#
-# 10. showing frames rate
-# 11. displaying
-
 # variable declaration
 
 widthCam, heightCam = 640, 480
@@ -138,13 +124,13 @@ while True:
                     print("False left click happen")
 
                 # click events counter
-                # print(f'Total clicks: {totalClick}')
-                # print(f'False clicks: {falseClick}')
+                print(f'Total clicks: {totalClick}')
+                print(f'False clicks: {falseClick}')
 
                 # # accuracy calculation
-                # total_attempts = totalClick + falseClick
-                # accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
-                # print(f"Accuracy for left click: {accuracy:.2f}%")
+                total_attempts = totalClick + falseClick
+                accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
+                print(f"Accuracy for left click: {accuracy:.2f}%")
 
                 # countMouseClick()
 
@@ -165,13 +151,13 @@ while True:
                     print("False left click happen")
 
                 # click events counter
-                # print(f'Total clicks: {totalClick}')
-                # print(f'False clicks: {falseClick}')
+                print(f'Total clicks: {totalClick}')
+                print(f'False clicks: {falseClick}')
 
                 # # accuracy calculation
-                # total_attempts = totalClick + falseClick
-                # accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
-                # print(f"Accuracy for right click: {accuracy:.2f}%")
+                total_attempts = totalClick + falseClick
+                accuracy = (totalClick / total_attempts) * 100 if total_attempts > 0 else 0
+                print(f"Accuracy for right click: {accuracy:.2f}%")
 
         # 7. scrolling up
         if fingers[0] == 1 and fingers[1] == 0:
@@ -184,8 +170,8 @@ while True:
                 print("False left click happen")
 
             # click events counter
-            # print(f'Total clicks: {totalClick}')
-            # print(f'False clicks: {falseClick}')
+            print(f'Total clicks: {totalClick}')
+            print(f'False clicks: {falseClick}')
 
             # accuracy calculation
             total_attempts = totalClick + falseClick
@@ -203,8 +189,8 @@ while True:
                 print("False left click happen")
 
             # click events counter
-            # print(f'Total clicks: {totalClick}')
-            # print(f'False clicks: {falseClick}')
+            print(f'Total clicks: {totalClick}')
+            print(f'False clicks: {falseClick}')
 
             # accuracy calculation
             total_attempts = totalClick + falseClick

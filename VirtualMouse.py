@@ -29,7 +29,7 @@ widthCam, heightCam = 640, 480
 previousTime = 0
 widthScreen, heightScreen = autopy.screen.size()
 frameReduction = 100
-smoothening = 5
+smoothening = 3
 previousLocationX, previousLocationY = 0, 0
 currentLocationX, currentLocationY = 0, 0
 scale = autopy.screen.scale()
@@ -43,7 +43,7 @@ falseClick = 0
 capture = cv2.VideoCapture(0)
 capture.set(3, widthCam)  # width setting
 capture.set(4, heightCam)  # height setting
-detector = htm.handDetector(maxNumberHands=1)
+detector = htm.handDetector(maxNumberHands=2, minDetectionConfidence=0.7)
 
 # volume control initialization library
 
@@ -152,17 +152,44 @@ while True:
             # 6.2 clicking when distance is short
             if length < 30 and length1 < 30:
                 cv2.circle(img, (infoLine[4], infoLine[5]), 10, (0, 255, 255), cv2.FILLED)
-                autopy.mouse.click(autopy.mouse.Button.RIGHT)
+                try:
+                    autopy.mouse.click(autopy.mouse.Button.RIGHT)
+                    totalClick += 1
+                except autopy.autopy.error.MouseError:
+                    falseClick += 1
+                    print("False left click happen")
+
+                # click events counter
+                # print(f'Total clicks: {totalClick}')
+                # print(f'False clicks: {falseClick}')
 
         # 7. scrolling up
         if fingers[0] == 1 and fingers[1] == 0:
             cv2.circle(img, (x4, y4), 10, (255, 0, 255), cv2.FILLED)
-            pyautogui.scroll(50)  # scroll up 50 "clicks"
+            try:
+                pyautogui.scroll(50)  # scroll up 50 "clicks"
+                totalClick += 1
+            except autopy.autopy.error.MouseError:
+                falseClick += 1
+                print("False left click happen")
+
+            # click events counter
+            # print(f'Total clicks: {totalClick}')
+            # print(f'False clicks: {falseClick}')
 
         # 8. scrolling down
         if fingers[4] == 1:
             cv2.circle(img, (x6, y6), 10, (255, 0, 255), cv2.FILLED)
-            pyautogui.scroll(-50)  # scroll down 50 "clicks"
+            try:
+                pyautogui.scroll(-50)  # scroll down 50 "clicks"
+                totalClick += 1
+            except autopy.autopy.error.MouseError:
+                falseClick += 1
+                print("False left click happen")
+
+            # click events counter
+            # print(f'Total clicks: {totalClick}')
+            # print(f'False clicks: {falseClick}')
 
         # 9. volume up and down
         if fingers[0] == 1 and fingers[1] == 1:
